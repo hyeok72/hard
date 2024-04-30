@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import CurrentStudyGroupPage from './CurrentStudyGroupPage';
 import NewStudyGroupPage from './NewStudyGroupPage';
 import ManageStudyGroupPage from './ManageStudyGroupPage';
+import StudyGroupDetailPage from './StudyGroupDetailPage'; // 스터디 그룹 상세 페이지 컴포넌트 import
+
 
 // 사용자 정보를 담을 상태
 const userInfo = {
-  isLoggedIn: false,
-  username: '',
+  isLoggedIn: localStorage.getItem('isLoggedIn') === 'true', // 로그인 상태를 로컬 스토리지에서 가져옴
+  username: localStorage.getItem('username') || '', // 저장된 아이디를 가져옴
   password: ''
 };
 
@@ -22,13 +24,15 @@ const Wrapper = ({ children }) => {
 
 // 로그인 컴포넌트
 const LoginBanner = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(localStorage.getItem('username') || ''); // 저장된 아이디를 가져옴
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
 
   const handleLogin = () => {
     // 예: 실제로는 서버에 요청하여 사용자 정보를 확인해야 합니다.
     if (username === 'apple' && password === '1234') {
+      localStorage.setItem('isLoggedIn', 'true'); // 로그인 상태를 로컬 스토리지에 저장
+      localStorage.setItem('username', username); // 아이디를 로컬 스토리지에 저장
       userInfo.isLoggedIn = true;
       userInfo.username = username;
       userInfo.password = password;
@@ -61,6 +65,8 @@ const UserInfo = ({ onLogout }) => {
     userInfo.isLoggedIn = false;
     userInfo.username = '';
     userInfo.password = '';
+    localStorage.removeItem('isLoggedIn'); // 로컬 스토리지에서 로그인 상태 제거
+    localStorage.removeItem('username'); // 로컬 스토리지에서 아이디 제거
     // 로그아웃 처리
     onLogout();
   };
@@ -156,9 +162,16 @@ const StudyGroups = () => {
   );
 };
 
+
 // 메인 앱 컴포넌트
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(userInfo.isLoggedIn);
+
+  // 컴포넌트가 마운트될 때 한 번만 실행되는 부분
+  useEffect(() => {
+    // 로그인 상태가 변경될 때 로컬 스토리지에 반영
+    localStorage.setItem('isLoggedIn', isLoggedIn);
+  }, [isLoggedIn]);
 
   // 로그인 상태 업데이트 함수
   const handleLogin = () => {
@@ -181,21 +194,22 @@ const App = () => {
                 <StudyGroups style={{ flex: 1, marginRight: '10px' }} />
                 <CustomStudyGroups style={{ flex: 1 }} />
               </div>
+              <Routes>
+                <Route path="/current_study_group" element={<CurrentStudyGroupPage />} />
+                <Route path="/new_study_group" element={<NewStudyGroupPage />} />
+                <Route path="/manage_study_group" element={<ManageStudyGroupPage />} />
+                <Route path="/study_group/:id" element={<StudyGroupDetailPage />} />
+                {/* 다른 경로에 대한 처리도 추가할 수 있습니다 */}
+              </Routes>
             </>
           ) : (
             <LoginBanner onLogin={handleLogin} />
           )}
         </div>
       </Wrapper> 
-
-      <Routes>
-        <Route path="/current_study_group" element={<CurrentStudyGroupPage />} />
-        <Route path="/new_study_group" element={<NewStudyGroupPage />} />
-        <Route path="/manage_study_group" element={<ManageStudyGroupPage />} />
-        {/* 다른 경로에 대한 처리도 추가할 수 있습니다 */}
-      </Routes>
     </Router>
   );
 };
+
 
 export default App;
