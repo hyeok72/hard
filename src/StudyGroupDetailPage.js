@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import ScheduleBanner from './ScheduleBanner';
 import AttendanceBanner from './AttendanceBanner';
 import TasksBanner from './TasksBanner';
-import ProgressBanner from './ProgressBanner'; // ProgressBanner 컴포넌트 import
+import ProgressBanner from './ProgressBanner';
 
 const StudyGroupDetailPage = () => {
   const { id } = useParams();
@@ -27,20 +27,15 @@ const StudyGroupDetailPage = () => {
   }
 
   return (
-    <div style={{ backgroundColor: '#FFF8DC', padding: '20px' }}>
-      <h2>{studyGroup.name}</h2>
+    <div style={{ backgroundColor: '#f3f4f6', padding: '20px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#4b5563' }}>{studyGroup.name}</h2>
       
-      {/* ScheduleBanner 컴포넌트 */}
-      <ScheduleBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
-      
-      {/* ProgressBanner 컴포넌트 */}
-      <ProgressBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
-      
-      {/* AttendanceBanner 컴포넌트 */}
-      <AttendanceBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
-      
-      {/* TasksBanner 컴포넌트 */}
-      <TasksBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <ScheduleBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
+        <ProgressBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
+        <AttendanceBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
+        <TasksBanner studyGroup={studyGroup} onSave={saveToLocalStorage} />
+      </div>
     </div>
   );
 };

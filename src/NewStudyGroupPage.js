@@ -23,21 +23,21 @@ const NewStudyGroupPage = () => {
   );
 
   return (
-    <div style={{ backgroundColor: '#FFF8DC', padding: '20px' }}>
-      <h2>새로운 스터디 그룹 찾기</h2>
+    <div style={{ backgroundColor: '#f3f4f6', padding: '20px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#4b5563' }}>새로운 스터디 그룹 찾기</h2>
       {/* 검색 입력란 */}
       <input
         type="text"
         placeholder="스터디 그룹 검색"
         value={searchTerm}
         onChange={handleSearchChange}
-        style={{ marginBottom: '10px' }}
+        style={{ marginBottom: '20px', padding: '10px', borderRadius: '5px', border: '1px solid #d1d5db', width: '100%' }}
       />
 
       {/* 검색 결과 표시 */}
-      <ul>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
         {filteredStudyGroups.map(group => (
-          <li key={group.id}>{group.name}</li>
+          <li key={group.id} style={{ marginBottom: '10px', padding: '10px', borderRadius: '5px', border: '1px solid #d1d5db', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>{group.name}</li>
         ))}
       </ul>
     </div>

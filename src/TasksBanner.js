@@ -4,7 +4,6 @@ const TasksBanner = ({ studyGroup }) => {
   const [newTask, setNewTask] = useState('');
   const [tasks, setTasks] = useState([]);
 
-  // 해당 스터디 그룹의 과제 가져오기
   useEffect(() => {
     const storedTasks = localStorage.getItem(`tasks_${studyGroup.id}`);
     if (storedTasks) {
@@ -12,61 +11,55 @@ const TasksBanner = ({ studyGroup }) => {
     }
   }, [studyGroup]);
 
-  // 새로운 과제 추가
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
       const updatedTasks = [...tasks, { name: newTask, completed: false }];
       setTasks(updatedTasks);
-      // 해당 스터디 그룹의 과제를 로컬 스토리지에 저장
       localStorage.setItem(`tasks_${studyGroup.id}`, JSON.stringify(updatedTasks));
       setNewTask('');
     }
   };
 
-  // 과제 삭제
   const handleDeleteTask = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks.splice(index, 1);
     setTasks(updatedTasks);
-    // 해당 스터디 그룹의 과제를 로컬 스토리지에서 삭제
     localStorage.setItem(`tasks_${studyGroup.id}`, JSON.stringify(updatedTasks));
   };
 
-  // 과제 체크 토글
   const handleToggleTask = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks[index].completed = !updatedTasks[index].completed;
     setTasks(updatedTasks);
-    // 해당 스터디 그룹의 과제를 로컬 스토리지에 업데이트
     localStorage.setItem(`tasks_${studyGroup.id}`, JSON.stringify(updatedTasks));
   };
 
   return (
-    <div style={{ backgroundColor: '#FFA07A', padding: '10px', marginBottom: '20px' }}>
-      <h3>과제 현황</h3>
-      {/* 과제 추가 폼 */}
-      <div>
+    <div style={{ backgroundColor: '#f0f4f7', padding: '20px', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <h2 style={{ marginBottom: '20px', color: '#4b5563', textAlign: 'center' }}>과제 현황</h2>
+      <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
         <input
           type="text"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           placeholder="새로운 과제 추가"
+          style={{ padding: '5px', marginRight: '10px', borderRadius: '5px', border: '1px solid #d1d5db', flex: 1 }}
         />
-        <button onClick={handleAddTask}>추가</button>
+        <button onClick={handleAddTask} style={{ padding: '8px 15px', borderRadius: '5px', backgroundColor: '#4b5563', color: '#fff', border: 'none' }}>추가</button>
       </div>
-      {/* 과제 목록 */}
-      <ul>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
         {tasks.map((task, index) => (
-          <li key={index}>
+          <li key={index} style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
             <input
               type="checkbox"
               checked={task.completed}
               onChange={() => handleToggleTask(index)}
+              style={{ marginRight: '10px' }}
             />
-            <span style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+            <span style={{ textDecoration: task.completed ? 'line-through' : 'none', color: '#4b5563', flex: 1 }}>
               {task.name}
             </span>
-            <button onClick={() => handleDeleteTask(index)}>삭제</button>
+            <button onClick={() => handleDeleteTask(index)} style={{ padding: '5px 10px', borderRadius: '5px', backgroundColor: '#ef4444', color: '#fff', border: 'none' }}>삭제</button>
           </li>
         ))}
       </ul>
